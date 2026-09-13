@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Split textbook PDFs into chapter files locally in your browser."
+    >
+
+    <title>TextSplit</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+        defer
+    ></script>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"
+        defer
+    ></script>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+        defer
+    ></script>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"
+        defer
+    ></script>
+
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <header class="topbar">
+        <a class="brand" href="./">
+            TEXTSPLIT<span class="accent">_</span>
+        </a>
+
+        <div class="topbar-status">
+            <span class="status-dot"></span>
+            Local processing
+        </div>
+
+        <a
+            class="repo-link"
+            href="https://github.com/trzaidi/textsplit"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            GitHub
+        </a>
+    </header>
+
+    <main>
+        <section class="intro">
+            <p class="system-line">
+                TextSplit // PDF chapter splitter
+            </p>
+
+            <p class="intro-copy">
+                Separate a textbook PDF into individual chapter files.
+            </p>
+
+            <p class="privacy-line">
+                <span class="prompt">&gt;</span>
+                Files stay in your browser.
+            </p>
+        </section>
+
+        <section class="terminal-window">
+            <div class="terminal-titlebar">
+                <div class="window-controls" aria-hidden="true">
+                    <span class="control red"></span>
+                    <span class="control yellow"></span>
+                    <span class="control green"></span>
+                </div>
+
+                <span>textsplit@local: ~/pdf</span>
+
+                <span class="terminal-state">READY</span>
+            </div>
+
+            <div class="terminal-body">
+                <div
+                    id="terminal-log"
+                    class="terminal-log"
+                    aria-live="polite"
+                >
+                    <p>
+                        <span class="prompt">$</span>
+                        Select a PDF to begin.
+                    </p>
+                </div>
+
+                <label
+                    id="drop-zone"
+                    class="drop-zone"
+                    for="pdf-input"
+                >
+                    <input
+                        id="pdf-input"
+                        type="file"
+                        accept="application/pdf,.pdf"
+                    >
+
+                    <span class="command-line">
+                        <span class="prompt">$</span>
+
+                        <span id="file-name">
+                            No file selected
+                        </span>
+
+                        <span
+                            class="cursor"
+                            aria-hidden="true"
+                        ></span>
+                    </span>
+
+                    <span class="drop-instruction">
+                        Select or drop a PDF
+                    </span>
+
+                    <span class="drop-detail">
+                        Your file stays in your browser.
+                    </span>
+                </label>
+
+                <div
+                    id="file-details"
+                    class="file-details"
+                    hidden
+                >
+                    <span>
+                        File:
+                        <strong id="selected-file-name"></strong>
+                    </span>
+
+                    <span>
+                        Size:
+                        <strong id="file-size"></strong>
+                    </span>
+                </div>
+
+                <button
+                    id="split-button"
+                    class="terminal-button"
+                    type="button"
+                    disabled
+                >
+                    Detect chapters
+                </button>
+
+                <div
+                    id="progress-area"
+                    class="progress-area"
+                    hidden
+                >
+                    <div class="progress-label">
+                        <span id="status-text">
+                            Scanning
+                        </span>
+
+                        <span id="progress-value">
+                            0%
+                        </span>
+                    </div>
+
+                    <progress
+                        id="progress-bar"
+                        max="100"
+                        value="0"
+                    ></progress>
+                </div>
+
+                <div
+                    id="message"
+                    class="message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+            </div>
+        </section>
+
+        <section
+            id="results-panel"
+            class="results-panel"
+            hidden
+        >
+            <div class="section-command">
+                <span class="prompt">$</span>
+                detected chapters
+            </div>
+
+            <div class="results-heading">
+                <h2>Detected files</h2>
+                <span id="chapter-count">0 chapters</span>
+            </div>
+
+            <ol
+                id="chapter-list"
+                class="chapter-list"
+            ></ol>
+
+            <button
+                id="download-button"
+                class="terminal-button"
+                type="button"
+            >
+                Download chapters
+            </button>
+        </section>
+
+        <section class="notice">
+            <p>
+                <span class="prompt">&gt;</span>
+                TextSplit checks PDF bookmarks, searchable text,
+                and scanned page images. OCR takes longer but
+                remains local.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <span>TextSplit</span>
+        <span>
+            Files are processed locally in your browser.
+        </span>
+    </footer>
+</body>
+</html>
