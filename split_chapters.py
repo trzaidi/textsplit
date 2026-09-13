@@ -1,5 +1,6 @@
 import logging
 import re
+import sys
 from pathlib import Path
 
 from pypdf import PdfReader, PdfWriter
@@ -187,8 +188,8 @@ def split_textbook(pdf_path):
     if end_page is None:
         end_page = len(reader.pages)
 
-    output_folder = Path(
-        safe_filename(f"{pdf_path.stem} - Chapters")
+    output_folder = pdf_path.parent / safe_filename(
+    f"{pdf_path.stem} - Chapters"
     )
 
     output_folder.mkdir(exist_ok=True)
@@ -234,11 +235,25 @@ def split_textbook(pdf_path):
 
 def main():
     try:
-        pdf_files = find_pdfs()
-        selected_pdf = choose_pdf(pdf_files)
+        if len(sys.argv) > 1:
+            selected_pdf = Path(sys.argv[1]).expanduser().resolve()
+
+            if not selected_pdf.is_file():
+                raise FileNotFoundError(
+                    f"PDF not found: {selected_pdf}"
+                )
+
+            if selected_pdf.suffix.lower() != ".pdf":
+                raise ValueError(
+                    "The selected file must be a PDF."
+                )
+        else:
+            pdf_files = find_pdfs()
+            selected_pdf = choose_pdf(pdf_files)
+
         split_textbook(selected_pdf)
 
-    except FileNotFoundError as error:
+    except (FileNotFoundError, ValueError) as error:
         print(f"\nError: {error}")
 
     except KeyboardInterrupt:
