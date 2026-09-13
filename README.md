@@ -6,6 +6,20 @@ TextSplit first searches the PDF’s bookmarks for chapter boundaries. If usable
 
 All PDF processing happens locally on your computer. TextSplit does not upload, store, or transmit your textbook.
 
+## Use TextSplit Online
+
+Use the free browser version without installing Python or downloading the repository:
+
+**[Open TextSplit](https://trzaidi.github.io/textsplit/)**
+
+1. Open the website.
+2. Select or drop a PDF.
+3. Select **Detect Chapters**.
+4. Review the detected chapter files.
+5. Select **Build and Download ZIP**.
+
+The browser version processes the PDF on your device. It supports PDF bookmarks, searchable chapter headings, and OCR detection for scanned image-only PDFs. No account is required, and the PDF is not uploaded to TextSplit.
+
 ## Features
 
 - Splits large textbook PDFs into individual chapters
